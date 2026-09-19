@@ -51,39 +51,52 @@ int abreMatriz(char maze[10][10], const char name[], int *h, int *l)
     }
 }
 
+void escreverlab(char maze[10][10]){
+    printf("\n");
+    for (int i=0;i<9;i++){
+        for(int j=0;j<9;j++){
+            printf("%c",maze[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 int progredir(char maze[10][10], int h, int l)
 {
-
-    if (maze[h][l] != '0' && 'E')
+    if (maze[h][l] == 'S')
+    {
+        printf("\nSaida = %d, %d", h, l);
+        return 1;
+    }
+    if (maze[h][l] != '0' && maze[h][l] != 'E')
     {
         return 0;
     }
-    if (maze[h][l] == 'S')
-    {
-        return 1;
-    }
 
     maze[h][l] = '1';
+    printf("\n%d, %d", h, l);
 
-    if (progredir(maze, h - 1, l))
+    if (h>0 && (progredir(maze, h - 1, l))) // Cima
     {
         return 1;
     }
 
-    if (progredir(maze, h, l + 1))
+    if (l<9 && (progredir(maze, h, l + 1))) // Direita
     {
         return 1;
     }
 
-    if (progredir(maze, h + 1, l))
+    if (h<9 && (progredir(maze, h + 1, l))) // Baixo
     {
         return 1;
     }
 
-    if (progredir(maze, h, l - 1))
+    if (l>0 && (progredir(maze, h, l - 1))) // Esquerda
     {
         return 1;
     }
+
+    return 0;
 }
 
 int main(void)
@@ -102,5 +115,9 @@ int main(void)
         return 1;
     }
 
-    progredir(maze, h, l);
+    escreverlab(maze);
+
+    if (progredir(maze, h, l)){
+        printf("\nLabirinto Concluido!");
+    };
 }
