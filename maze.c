@@ -53,8 +53,8 @@ int abreMatriz(char maze[10][10], const char name[], int *h, int *l)
 
 void escreverlab(char maze[10][10]){
     printf("\n");
-    for (int i=0;i<9;i++){
-        for(int j=0;j<9;j++){
+    for (int i=0;i<10;i++){
+        for(int j=0;j<10;j++){
             printf("%c",maze[i][j]);
         }
         printf("\n");
