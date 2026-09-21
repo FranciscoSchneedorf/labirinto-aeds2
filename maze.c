@@ -129,7 +129,7 @@ int main(void)
 
     if (progredir(maze, h, l)){
         printf("\nLabirinto Concluido!");
-        for (int i=tam; i>=0;i--){
+        for (int i=tam-1; i>=0;i--){
             printf("\n%d, %d",route[i].h, route[i].l);
         }
         printf("\n");
