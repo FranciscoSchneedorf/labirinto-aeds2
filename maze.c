@@ -61,11 +61,18 @@ void escreverlab(char maze[10][10]){
     }
 }
 
+typedef struct {
+    int h, l;
+} Pos;
+
+Pos route[100];
+int tam=0;
+
 int progredir(char maze[10][10], int h, int l)
 {
     if (maze[h][l] == 'S')
     {
-        printf("\nSaida = %d, %d", h, l);
+        route[tam++] = (Pos){h, l};
         return 1;
     }
     if (maze[h][l] != '0' && maze[h][l] != 'E')
@@ -74,25 +81,28 @@ int progredir(char maze[10][10], int h, int l)
     }
 
     maze[h][l] = '1';
-    printf("\n%d, %d", h, l);
 
     if (h>0 && (progredir(maze, h - 1, l))) // Cima
     {
+        route[tam++] = (Pos){h, l};
         return 1;
     }
 
     if (l<9 && (progredir(maze, h, l + 1))) // Direita
     {
+        route[tam++] = (Pos){h, l};
         return 1;
     }
 
     if (h<9 && (progredir(maze, h + 1, l))) // Baixo
     {
+        route[tam++] = (Pos){h, l};
         return 1;
     }
 
     if (l>0 && (progredir(maze, h, l - 1))) // Esquerda
     {
+        route[tam++] = (Pos){h, l};
         return 1;
     }
 
@@ -119,5 +129,9 @@ int main(void)
 
     if (progredir(maze, h, l)){
         printf("\nLabirinto Concluido!");
+        for (int i=tam; i>=0;i--){
+            printf("\n%d, %d",route[i].h, route[i].l);
+        }
+        printf("\n");
     };
 }
