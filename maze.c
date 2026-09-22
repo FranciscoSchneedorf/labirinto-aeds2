@@ -1,4 +1,8 @@
+// AEDs 2 - Labirinto
+// Alunos: Maick Carvalho e Francisco Schneedorf
+
 #include <stdio.h>
+#include "maze.h"
 
 int leMatriz(FILE *arch, char maze[10][10], int *linhaEntrada, int *colunaEntrada)
 {
@@ -51,61 +55,51 @@ int abreMatriz(char maze[10][10], const char name[], int *h, int *l)
     }
 }
 
-void escreverlab(char maze[10][10]){
-    printf("\n");
-    for (int i=0;i<10;i++){
-        for(int j=0;j<10;j++){
-            printf("%c",maze[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-typedef struct {
-    int h, l;
-} Pos;
-
-Pos route[100];
-int tam=0;
-
+//Função que efetivamente percorre o labirinto
 int progredir(char maze[10][10], int h, int l)
 {
+    //Checa se o espaço atual é a saída, se sim, retorna que o labirinto está concluído
     if (maze[h][l] == 'S')
     {
         route[tam++] = (Pos){h, l};
         return 1;
     }
+
+    //Checa se a casa atual é um X, se sim, retorna e busca outro caminho
     if (maze[h][l] != '0' && maze[h][l] != 'E')
     {
         return 0;
     }
 
+    //Definde o espaço atual como 1 != 0 para evitar loop
     maze[h][l] = '1';
 
-    if (h>0 && (progredir(maze, h - 1, l))) // Cima
+    if (h>0 && (progredir(maze, h - 1, l))) // Progride para cima
+    {
+        //Retroativamente salva a posição visitada no vetor de trajeto
+        route[tam++] = (Pos){h, l};
+        return 1;
+    }
+
+    if (l<9 && (progredir(maze, h, l + 1))) // Progride para a direita
     {
         route[tam++] = (Pos){h, l};
         return 1;
     }
 
-    if (l<9 && (progredir(maze, h, l + 1))) // Direita
+    if (h<9 && (progredir(maze, h + 1, l))) // Progride para baixo
     {
         route[tam++] = (Pos){h, l};
         return 1;
     }
 
-    if (h<9 && (progredir(maze, h + 1, l))) // Baixo
+    if (l>0 && (progredir(maze, h, l - 1))) // Progride para a esquerda
     {
         route[tam++] = (Pos){h, l};
         return 1;
     }
 
-    if (l>0 && (progredir(maze, h, l - 1))) // Esquerda
-    {
-        route[tam++] = (Pos){h, l};
-        return 1;
-    }
-
+    //Retorna para o espaço passado caso nenhuma direção esteja disponível
     return 0;
 }
 
@@ -125,13 +119,17 @@ int main(void)
         return 1;
     }
 
-    escreverlab(maze);
-
+    //Começo do labirinto com as coordenadas de "E" como entrada 
     if (progredir(maze, h, l)){
         printf("\nLabirinto Concluido!");
+
+        //Exibição do trajeto percorrido
         for (int i=tam-1; i>=0;i--){
             printf("\n%d, %d",route[i].h, route[i].l);
         }
         printf("\n");
+
+    }else{
+        printf("\n Labirinto sem saída!");
     };
 }
