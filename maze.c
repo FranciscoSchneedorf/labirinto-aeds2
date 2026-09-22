@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include "maze.h"
 
+// Definição das variáveis globais declaradas em maze.h
+Pos route[100];
+int tam = 0;
+
 int leMatriz(FILE *arch, char maze[10][10], int *linhaEntrada, int *colunaEntrada)
 {
     int encontrouEntrada = 0;
